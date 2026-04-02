@@ -16,8 +16,8 @@ void solve() {
 
 signed main() {
     ios::sync_with_stdio(false);
-    cin.tie(0);
-    cout.tie(0);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
     int _ = 1;
     //	cin>>_;
     //	cout<<fixed<<setprecision(1);
@@ -26,6 +26,7 @@ signed main() {
     }
     return 0;
 }
+
 ```
 
 
@@ -891,7 +892,7 @@ auto cx = [&](int l,int r) {//这一个是查询在l~r区间内的值
 //树状数组能够支持动态查询前缀和,单点修改
 //注意，树状数组查询的是前缀和,如果是单点查询的话,可以用树状数组存储差分数组。
 int tree[N];
-void lowbit(int x) {
+int lowbit(int x) {
 	return x&-x;
 }
 int cx(int x) {
@@ -1858,6 +1859,14 @@ struct KMP{
 ## 数学
 
 ### GCD与筛法：
+
+#### 普通gcd
+
+```c++
+int gcd(int x, int y) {
+    return y == 0 ? x : gcd(y, x % y);
+}
+```
 
 #### 拓展欧几里得：
 
@@ -3260,6 +3269,19 @@ $$
 
 ###  向量
 
+#### Steinitz引理
+
+$$
+设  B \subset \mathbb{R}^2  是一个关于原点中心对称的凸集（即若  v \in B  则  -v \in B 。  \\
+给定任意有限个向量  v_1, v_2, \dots, v_n ，满足每个  v_i \in B  且总和  \sum_{i=1}^n v_i = \mathbf{0} 。  \\
+则存在一个排列  \pi  使得所有前缀和\\
+S_k = \sum_{i=1}^k v_{\pi(i)}, \quad k = 1,2,\dots,n\\都落在放大一倍的集合  2B = \{ 2x \mid x \in B \}  中。\\
+\\
+通俗点来讲,如果给你一堆在二维空间中的向量,并且这些向量都在B这个中心对成的凸多边形的范围内\\
+那么我们就能够找到一种方法对这些向量进行拼接,使得每次拼接后都在2B范围内\\
+通常用于广搜的时候限定搜索的范围.判断通过某些向量能否到达某个点
+$$
+
 #### 点乘
 
 $$
@@ -3298,6 +3320,24 @@ $$
 \vec{a} \times \vec{b} = -\vec{b} \times \vec{a} \quad \text{(反交换律)} \\
 (\vec{a} \times \vec{b}) \times \vec{c} \neq \vec{a} \times (\vec{b} \times \vec{c}) \quad \text{(不满足结合律)} \\
 $$
+
+##### to_left测试
+
+```c++
+int to_left(point a, point b, point p) {
+    //判断p点在a->b直线的哪一个方向
+    //返回值>0则p在a->b有向直线左侧
+    //返回值=0则p在a->b有向直线上
+    //返回值<0则p在a->b有向直线右侧
+    type ls = (b.x - a.x) * (p.y - a.y) - (b.y - a.y) * (p.x - a.x);
+    if (fabs(ls) < EPS) return 0;
+    else if (ls < 0) {
+        return -1;
+    } else {
+        return 1;
+    }
+}
+```
 
 #### 向量旋转
 
@@ -3391,7 +3431,7 @@ int sgn(type x) {
 }
 
 int to_left(point a, point b, point p) {
-    //判断p线段在a->b直线的哪一个方向
+    //判断p点在a->b直线的哪一个方向
     //返回值>0则p在a->b有向直线左侧
     //返回值=0则p在a->b有向直线上
     //返回值<0则p在a->b有向直线右侧

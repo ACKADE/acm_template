@@ -806,6 +806,14 @@ for(int i=1;i<=n;i++){
 
 ### 分块+莫队（带修）
 
+**普通莫队**（带奇偶排序优化）
+
+总时间复杂度： $O(n\sqrt{Q})$
+
+**带修莫队**（带奇偶排序优化）
+
+总时间复杂度：$O(n^{5/3})$
+
 //注意,带修莫队的分块长度是n的2/3次方，不然时间会t
 
 ```c++
@@ -1748,9 +1756,13 @@ void solve(){
 
 ### ac自动机
 
+$$
+用途: 多模式串匹配，一次性找出所有模式串在文本串中的出现位置或出现次数或...\\
+时间复杂度:O(∑|模式串|)+O(|文本串|)
+$$
+
 ```c++
 int n;
-const int N = 1;
 string s;
 int tr[N][26];
 int fail[N];
@@ -1763,11 +1775,12 @@ void built() {
     queue<int> q;
     for (int i = 0; i < 26; i++) {
         if (tr[0][i]) {
+            //注意这里没有跑0这个点
             q.push(tr[0][i]);
         }
     }
     while (!q.empty()) {
-        //模拟bfs 一层一层构建失配指针
+        //模拟bfs 一层一层构建失配指针，必须bfs的跑，不能dfs的跑，dfs跑，其他路径的fail指针还没有构建好，当前点的fail指针就会构建失败
         int u = q.front();
         q.pop();
         for (int i = 0; i < 26; i++) {
@@ -1776,7 +1789,7 @@ void built() {
                 fail[tr[u][i]] = tr[fail[u]][i]; //如果当前点失配了那就跑到这个点失配指针指向的点看看它是否有第i个字母
                 q.push(tr[u][i]);
             } else {
-                tr[u][i] = tr[fail[u]][i]; //已经失配的情况//			
+                tr[u][i] = tr[fail[u]][i]; //已经失配的情况//
             }
         }
     }
@@ -1786,7 +1799,7 @@ void solve() {
     cin >> n;
     for (int i = 0; i < n; i++) {
         cin >> s;
-        int m = s.length();
+        int m = s.size();
         int now = 0;
         for (int j = 0; j < m; j++) {
             //构造字典树
@@ -1798,20 +1811,21 @@ void solve() {
                 now = cnt;
             }
         }
+        //val数组修改的地方,val[now]++可以用来代表now地方有几个串结尾，也可同步开一个vector数组,写清楚这个地方有多少个串匹配成功
     }
     built(); //构建字典树之中的失配指针
     cin >> s;
-    int m = s.length();
+    int m = s.size();
     int p = 0;
     for (int i = 0; i < m; i++) {
         int tmp = s[i] - 'a';
         p = tr[p][tmp]; //文本串匹配
         for (int t = p; t; t = fail[t]) {
-            //遍历所有出现过的串
+            //遍历所有出现过的串，注意，串进行到i这个地方，所有p的fail都已经匹配成功。
+            //这里与前面val的写法相互配合，进行匹配
         }
     }
 }
-
 ```
 
 ### KMP自动机

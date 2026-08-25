@@ -1,0 +1,34 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "C/C++: 编译当前文件",
+            "type": "shell",
+            "command": "D:/cpp-toolchain/w64devkit/bin/g++.exe",
+            "args": [
+                "-std=c++17",
+                "-O2",
+                "-Wall",
+                "-Wextra",
+                "-Wshadow",
+                "${file}",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}.exe"
+            ],
+            "options": {
+                "cwd": "${fileDirname}",
+                "env": {
+                    "PATH": "D:/cpp-toolchain/w64devkit/bin;${env:PATH}"
+                }
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "使用 w64devkit GCC 以 C++17、O2 编译当前文件。"
+        }
+    ]
+}

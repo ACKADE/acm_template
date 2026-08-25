@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "调试当前 C++ 文件",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${fileDirname}/${fileBasenameNoExtension}.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "D:/cpp-toolchain/w64devkit/bin/gdb.exe",
+            "preLaunchTask": "C/C++: 编译当前文件"
+        }
+    ]
+}
